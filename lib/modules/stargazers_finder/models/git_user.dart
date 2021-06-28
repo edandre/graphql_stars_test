@@ -27,15 +27,17 @@ class GitUser {
 
   factory GitUser.fromJson(Map<String, dynamic> json) => GitUser(
         name: json["name"] == null ? null : json["name"],
-        avatarUrl: json["avatarUrl"] == null ? null : json["avatarUrl"],
+        avatarUrl: json["avatarUrl"],
         bio: json["bio"] == null ? null : json["bio"],
         location: json["location"] == null ? null : json["location"],
         email: json["email"] == null ? null : json["email"],
-        url: json["url"] == null ? null : json["url"],
+        url: json["url"],
         starredRepositories: json["starredRepositories"] == null
             ? null
-            : json["starredRepositories"]
-                .map((e) => StarredRepository.fromJson(e["nodes"])),
+            : json["starredRepositories"]["nodes"]
+                .map((e) => StarredRepository.fromJson(e))
+                .cast<StarredRepository>()
+                .toList(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -68,11 +70,9 @@ class StarredRepository {
 
   factory StarredRepository.fromJson(Map<String, dynamic> json) =>
       StarredRepository(
-        nameWithOwner:
-            json["nameWithOwner"] == null ? null : json["nameWithOwner"],
+        nameWithOwner: json["nameWithOwner"],
         description: json["description"] == null ? null : json["description"],
-        stargazerCount:
-            json["stargazerCount"] == null ? null : json["stargazerCount"],
+        stargazerCount: json["stargazerCount"],
       );
 
   Map<String, dynamic> toJson() => {
