@@ -20,17 +20,23 @@ class GitUserViewModel with ChangeNotifier {
   String? get actionFeedbackMessage => _actionFeedbackMessage;
 
   Future fetchStarredReposFrom({required String username}) async {
-    switchViewState(to: ViewState.loading);
-
-    final user =
-        await _userRepository.fetchStarredReposFrom(username: username);
-
-    if (user == null) {
+    if (username.isEmpty) {
       switchViewState(
-          to: ViewState.action_error, message: 'Usuário não encontrado');
+          to: ViewState.action_error,
+          message: 'Nome de usuário(a) obrigatório');
     } else {
-      _gitUser = user;
-      switchViewState(to: ViewState.action_success);
+      switchViewState(to: ViewState.loading);
+
+      final user =
+          await _userRepository.fetchStarredReposFrom(username: username);
+
+      if (user == null) {
+        switchViewState(
+            to: ViewState.action_error, message: 'Usuário não encontrado');
+      } else {
+        _gitUser = user;
+        switchViewState(to: ViewState.action_success);
+      }
     }
   }
 

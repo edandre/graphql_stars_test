@@ -1,11 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:git_stars/modules/stargazers_finder/services/github_service.dart';
 import 'package:git_stars/modules/stargazers_finder/models/git_user.dart';
 
 class UserRepository {
   late final GitHubService service;
 
-  UserRepository() {
-    service = GitHubService();
+  UserRepository({required BuildContext context}) {
+    service = GitHubService(context: context);
   }
 
   Future<GitUser?> fetchStarredReposFrom({required String username}) async {

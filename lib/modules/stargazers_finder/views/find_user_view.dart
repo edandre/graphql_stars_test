@@ -77,6 +77,21 @@ class FindUserView extends StatelessWidget {
                         if (_gitUserViewModel.viewState ==
                             ViewState.action_success) {
                           Navigator.of(context).pushNamed('user-view');
+                        } else if (_gitUserViewModel.viewState ==
+                            ViewState.action_error) {
+                          showModalBottomSheet(
+                              context: context,
+                              builder: (_) {
+                                return Container(
+                                  height: 80,
+                                  width: double.infinity,
+                                  child: Center(
+                                    child: Text(_gitUserViewModel
+                                            .actionFeedbackMessage ??
+                                        "Ops, ocorreu um erro!"),
+                                  ),
+                                );
+                              });
                         }
                       },
                     ),

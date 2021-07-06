@@ -1,4 +1,6 @@
+import 'dart:convert' show json;
 import 'package:flutter/material.dart';
+import 'package:git_stars/core/app_settings.dart';
 import 'package:git_stars/core/themes/light_theme.dart';
 import 'package:git_stars/modules/stargazers_finder/view_models/git_user_view_model.dart';
 import 'package:git_stars/modules/stargazers_finder/views/find_user_view.dart';
@@ -8,12 +10,13 @@ import 'package:provider/provider.dart';
 import 'core/themes/dark_theme.dart';
 import 'modules/stargazers_finder/repositories/user_repository.dart';
 
-void main() {
+void main() async {
   runApp(MultiProvider(
     providers: [
+      Provider(create: (context) => AppSettings()),
       Provider(create: (context) => LightTheme()),
       Provider(create: (context) => DarkTheme()),
-      Provider(create: (context) => UserRepository()),
+      Provider(create: (context) => UserRepository(context: context)),
       ChangeNotifierProvider(
           create: (context) => GitUserViewModel(context: context)),
     ],
@@ -24,6 +27,9 @@ void main() {
 class GitStarsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Provider.of<AppSettings>(context)
+        .init(context: context, theme: AppTheme.light);
+
     return MaterialApp(
       title: 'Git Stars',
       routes: {
