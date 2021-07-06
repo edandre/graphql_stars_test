@@ -1,5 +1,7 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:git_stars/modules/stargazers_finder/models/git_user.dart';
 import 'package:git_stars/modules/stargazers_finder/view_models/git_user_view_model.dart';
 import 'package:provider/provider.dart';
@@ -13,13 +15,6 @@ class UserView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade200,
-      appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.blue,
-        ),
-        elevation: 0.00,
-        toolbarHeight: 0,
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -27,14 +22,32 @@ class UserView extends StatelessWidget {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Image.network(
-                      _gitUserViewModel.gitUser?.avatarUrl ??
-                          'https://www.inbounder.com.br/wp-content/themes/inbounder/images/no-image/No-Image-Found-400x264.png',
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                  ),
+                  Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Image.network(
+                          _gitUserViewModel.gitUser?.avatarUrl ??
+                              'https://www.inbounder.com.br/wp-content/themes/inbounder/images/no-image/No-Image-Found-400x264.png',
+                          width: MediaQuery.of(context).size.width,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: IconButton(
+                          icon: Icon(
+                            Platform.isAndroid
+                                ? Icons.arrow_back
+                                : CupertinoIcons.back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
               Row(
@@ -224,7 +237,7 @@ class UserView extends StatelessWidget {
                 )
               else
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.00),
+                  padding: EdgeInsets.fromLTRB(0, 8.00, 0, 60),
                   child: Column(
                     children: ListTile.divideTiles(
                             context: context,
